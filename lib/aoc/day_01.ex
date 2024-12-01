@@ -9,7 +9,7 @@ defmodule AOC.Day01 do
     iex> AOC.Day01.a()
     {:ok, 1}
   """
-  def a do
+  def a(_) do
     {:ok, 1}
   end
 end
