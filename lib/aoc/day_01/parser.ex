@@ -1,5 +1,31 @@
 defmodule AOC.Day01.Parser do
   @doc ~S"""
+  Parse a stream into two tuples, left and right.
+
+  ### Examples
+
+    iex> input = [
+    ...>   "3   4",
+    ...>   "4   3",
+    ...>   "2   5",
+    ...>   "1   3",
+    ...>   "3   9",
+    ...>   "3   3",
+    ...> ]
+    iex> AOC.Day01.Parser.parse_input(input)
+    {[3, 4, 2, 1, 3, 3], [4, 3, 5, 3, 9, 3]}
+  """
+  def parse_input(input) do
+    input
+    |> Stream.map(fn line ->
+      {:ok, output} = AOC.Day01.Parser.parse_line(line)
+
+      output
+    end)
+    |> Enum.unzip()
+  end
+
+  @doc ~S"""
   Parse a single line of Day 1 input.
 
   ## Examples
