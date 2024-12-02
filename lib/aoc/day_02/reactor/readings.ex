@@ -12,6 +12,9 @@ defmodule AOC.Day02.Reactor.Reading do
     }
   end
 
+  @doc ~S"""
+  Register a new reading and return all possible safe actual values.
+  """
   def register(reading, level) do
     new_levels = reading.levels ++ [level]
 
@@ -39,6 +42,10 @@ defmodule AOC.Day02.Reactor.Reading do
   end
 
   @doc ~S"""
+  Is a single list of level readings safe?
+
+  ## Examples
+
     iex> AOC.Day02.Reactor.is_safe?([1, 2, 3, 4, 5])
     true
     iex> AOC.Day02.Reactor.is_safe?([1, 2, 4, 4, 5])
