@@ -7,6 +7,20 @@ via The UK, I am cautiously optimistic, and certainly excited!
 
 ## Instructions
 
-Run `mix solve [day] [part]` where `[day]` is a number, and `[part]` is either `a` or `b`.
+Every exercise is implemented in `lib/aoc/day_{n}.ex`. Each solution has example code with the supplied test input, which double as unit tests. Run the unit tests like so:
 
-Run `mix test` to test against example inputs.
+```
+mix test
+```
+
+Or run a single file like:
+
+```
+mix test test/aoc/day_01.exs
+```
+
+There is a Mix task that passes stdin to a requested solution, and emits the answer for the supplied input. For example:
+
+```
+mix solve 2 b < input/day-2.txt
+```
