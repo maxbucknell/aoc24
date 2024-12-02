@@ -59,7 +59,16 @@ defmodule AOC.Day02.Validator do
         _ -> @increasing
       end
 
-    Enum.all?(pairs, &is_pair_safe?(&1, direction))
+    _is_safe?(pairs, direction)
+  end
+
+  defp _is_safe?(pairs, direction) do
+    tail = Enum.slice(pairs, 1..-1//1)
+
+    case Enum.take(pairs, 1) do
+      [] -> true
+      [pair] -> is_pair_safe?(pair, direction) && _is_safe?(tail, direction)
+    end
   end
 
   @doc ~S"""
