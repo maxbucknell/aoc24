@@ -52,9 +52,7 @@ defmodule AOC.Day01 do
   def b(input) do
     {left, right} = AOC.Day01.Parser.parse_input(input)
 
-    occurrences =
-      right
-      |> Enum.reduce(%{}, fn n, acc -> Map.update(acc, n, 1, &(&1 + 1)) end)
+    occurrences = Enum.frequencies(right)
 
     result =
       left
