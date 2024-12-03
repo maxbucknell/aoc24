@@ -20,4 +20,37 @@ defmodule AOC.Day03.ParserTest do
 
     assert lhs == {:mul}
   end
+
+  test "Should find a complete multiplication" do
+    lhs =
+      Parser.parse(nil, "m")
+      |> Parser.parse("u")
+      |> Parser.parse("l")
+      |> Parser.parse("(")
+      |> Parser.parse("2")
+      |> Parser.parse("3")
+      |> Parser.parse(",")
+      |> Parser.parse("1")
+      |> Parser.parse("9")
+      |> Parser.parse(")")
+
+    assert lhs == {:val, 437}
+  end
+
+  test "Something invalid makes nil" do
+    lhs =
+      Parser.parse(nil, "m")
+      |> Parser.parse("u")
+      |> Parser.parse("l")
+      |> Parser.parse("(")
+      |> Parser.parse("2")
+      |> Parser.parse("3")
+      |> Parser.parse(",")
+      |> Parser.parse(",")
+      |> Parser.parse("1")
+      |> Parser.parse("9")
+      |> Parser.parse(")")
+
+    assert lhs == nil
+  end
 end
