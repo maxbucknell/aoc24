@@ -1,7 +1,7 @@
-defmodule AOC.Day03.ParserTest do
+defmodule AOC.Day03.Parser.ATest do
   use ExUnit.Case, async: true
 
-  alias AOC.Day03.Parser
+  alias AOC.Day03.Parser.A, as: Parser
 
   test "Should wait for m" do
     assert Parser.parse(nil, "m") == {:m}

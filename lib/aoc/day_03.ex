@@ -10,7 +10,27 @@ defmodule AOC.Day03 do
     result =
       input
       |> Enum.reduce({[], nil}, fn x, {vals, state} ->
-        case Parser.parse(state, x) do
+        case Parser.A.parse(state, x) do
+          {:val, n} -> {vals ++ [n], nil}
+          new_state -> {vals, new_state}
+        end
+      end)
+      |> (fn {vals, _} -> vals end).()
+      |> Enum.sum()
+
+    {:ok, result}
+  end
+
+  @doc ~S"""
+    iex> input = String.codepoints("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
+    iex> AOC.Day03.b(input)
+    {:ok, 48}
+  """
+  def b(input) do
+    result =
+      input
+      |> Enum.reduce({[], nil}, fn x, {vals, state} ->
+        case Parser.B.parse(state, x) do
           {:val, n} -> {vals ++ [n], nil}
           new_state -> {vals, new_state}
         end
