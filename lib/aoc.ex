@@ -15,7 +15,8 @@ defmodule AOC do
   @solutions %{
     1 => AOC.Day01,
     2 => AOC.Day02,
-    3 => AOC.Day03
+    3 => AOC.Day03,
+    4 => AOC.Day04
   }
 
   defp get_day(day) do
