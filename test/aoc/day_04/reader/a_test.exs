@@ -1,7 +1,7 @@
-defmodule AOC.Day04.ReaderTest do
+defmodule AOC.Day04.Reader.ATest do
   use ExUnit.Case, async: true
 
-  alias AOC.Day04.Reader
+  alias AOC.Day04.Reader.A, as: Reader
 
   test "Finds an x" do
     actual = Reader.read_line("X")

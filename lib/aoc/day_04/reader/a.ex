@@ -1,4 +1,4 @@
-defmodule AOC.Day04.Reader do
+defmodule AOC.Day04.Reader.A do
   @doc ~S"""
   Read a single line of wordsearch and return new state.
 
