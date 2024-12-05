@@ -48,9 +48,11 @@ defmodule AOC.Day04 do
     ...>   "MXMXAXMASX",
     ...>   ]
     iex> AOC.Day04.b(input)
-    {:ok, 18}
+    {:ok, 9}
   """
-  def b(_) do
-    {:error, :not_implemented_yet}
+  def b(input) do
+    %{count: count} = Enum.reduce(input, %{}, &Reader.B.read_line/2)
+
+    {:ok, count}
   end
 end
