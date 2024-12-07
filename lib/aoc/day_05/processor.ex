@@ -42,23 +42,25 @@ defmodule AOC.Day05.Processor do
 
     numbers =
       String.split(line, ",", trim: true)
-      |> Enum.map(&String.to_integer/1)
+      |> Enum.map_reduce(0, fn x, n -> {String.to_integer(x), n + 1} end)
 
-    Enum.reduce_while(numbers, {0, MapSet.new()}, fn x, {i, invalid} ->
+    key = if is_valid?(dependencies, numbers), do: :valid, else: :invalid
+
+    Map.update(state, key, [numbers], &([numbers] ++ &1))
+  end
+
+  def is_valid?(dependencies, {numbers, _}) do
+    Enum.reduce_while(numbers, MapSet.new(), fn x, invalid ->
       if MapSet.member?(invalid, x) do
         {:halt, false}
       else
         new_invalid = Map.get(dependencies, x, MapSet.new())
-        {:cont, {i + 1, MapSet.union(invalid, new_invalid)}}
+        {:cont, MapSet.union(invalid, new_invalid)}
       end
     end)
     |> case do
-      false ->
-        state
-
-      {n, _} ->
-        value = Enum.at(numbers, div(n - 1, 2))
-        Map.update(state, :valid_count, value, &(&1 + value))
+      false -> false
+      _ -> true
     end
   end
 

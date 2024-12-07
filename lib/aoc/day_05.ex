@@ -49,11 +49,17 @@ defmodule AOC.Day05 do
   def a(input) do
     acc = %{mode: :dependencies, dependencies: %{}, valid_count: 0}
 
-    %{valid_count: valid_count} =
+    result =
       input
       |> Stream.map(&String.trim/1)
       |> Enum.reduce(acc, &AOC.Day05.Processor.reduce_line/2)
+      |> Map.get(:valid, [])
+      |> Enum.reduce(0, fn {numbers, n}, sum ->
+        middle = Enum.at(numbers, div(n - 1, 2))
 
-    {:ok, valid_count}
+        sum + middle
+      end)
+
+    {:ok, result}
   end
 end
