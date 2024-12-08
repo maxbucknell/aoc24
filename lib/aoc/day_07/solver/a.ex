@@ -1,15 +1,15 @@
-defmodule AOC.Day07.Solver do
+defmodule AOC.Day07.Solver.A do
   @doc ~S"""
   As per 7A rules, is a line soluble?
 
 
   ## Examples
 
-    iex> AOC.Day07.Solver.has_solution?({190, [19, 10]})
+    iex> AOC.Day07.Solver.A.has_solution?({190, [19, 10]})
     true
-    iex> AOC.Day07.Solver.has_solution?({292, [20, 16, 6, 11]})
+    iex> AOC.Day07.Solver.A.has_solution?({292, [20, 16, 6, 11]})
     true
-    iex> AOC.Day07.Solver.has_solution?({156, [6, 15]})
+    iex> AOC.Day07.Solver.A.has_solution?({156, [6, 15]})
     false
   """
   def has_solution?({target, _}) when target < 0 do
