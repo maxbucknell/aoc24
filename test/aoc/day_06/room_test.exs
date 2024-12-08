@@ -90,7 +90,7 @@ defmodule AOC.Day06.RoomTest do
 
     expected = {
       {4, 1},
-      MapSet.new([{4, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}])
+      [{4, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}]
     }
 
     assert actual == expected
@@ -126,7 +126,31 @@ defmodule AOC.Day06.RoomTest do
 
     expected = {
       {5, 0},
-      MapSet.new([{5, 6}, {5, 5}, {5, 4}, {5, 3}, {5, 2}, {5, 1}, {5, 0}])
+      [{5, 6}, {5, 5}, {5, 4}, {5, 3}, {5, 2}, {5, 1}, {5, 0}]
+    }
+
+    assert actual == expected
+  end
+
+  test "Sorting at the end" do
+    input = [
+      "v......#"
+    ]
+
+    {room, _} = AOC.Day06.Parser.parse(input)
+
+    actual = Room.add_obstacle(room, 2, 0)
+
+    expected = %Room{
+      width: 8,
+      height: 1,
+      rows: %{
+        0 => [7, 2]
+      },
+      cols: %{
+        2 => [0],
+        7 => [0]
+      }
     }
 
     assert actual == expected

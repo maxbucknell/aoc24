@@ -26,4 +26,34 @@ defmodule AOC.Day06 do
 
     {:ok, MapSet.size(visited_nodes)}
   end
+
+  @doc ~S"""
+  Day 6, Part B
+
+  ## Example
+
+    iex> input = [
+    ...>   "....#.....",
+    ...>   ".........#",
+    ...>   "..........",
+    ...>   "..#.......",
+    ...>   ".......#..",
+    ...>   "..........",
+    ...>   ".#..^.....",
+    ...>   "........#.",
+    ...>   "#.........",
+    ...>   "......#...",
+    ...> ]
+    iex> AOC.Day06.b(input)
+    {:ok, 6}
+  """
+  def b(input) do
+    {room, guard} = AOC.Day06.Parser.parse(input)
+
+    loops = AOC.Day06.Guard.find_potential_loops(room, guard)
+
+    IO.inspect(loops)
+
+    {:ok, MapSet.size(loops)}
+  end
 end

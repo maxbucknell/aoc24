@@ -3,23 +3,24 @@ defmodule AOC.Day06.Room do
 
   @doc ~S"""
   Add an obstacle to a room.
-
-  THIS ONLY WORKS IF YOU ARE SEQUENTIALLY ADDING OBSTACLES
-
-  The entire implementation of this solution depends on the indices of
-  the rows and columns being sorted in descending order. If this is not
-  true, I don't know what would happen, but it ain't good.
-
-  I could fix this by sorting them at every addition, but I cbf to do
-  that when I also control the creation mechanism.
   """
   def add_obstacle(room, x, y) do
     %__MODULE__{
       width: max(room.width, x + 1),
       height: max(room.height, y + 1),
-      rows: Map.update(room.rows, y, [x], &[x | &1]),
-      cols: Map.update(room.cols, x, [y], &[y | &1])
+      rows: Map.update(room.rows, y, [x], &insert_entry(&1, x)),
+      cols: Map.update(room.cols, x, [y], &insert_entry(&1, y))
     }
+  end
+
+  defp insert_entry(vals, val) do
+    i =
+      case Enum.find_index(vals, &(&1 <= val)) do
+        nil -> -1
+        i -> i
+      end
+
+    List.insert_at(vals, i, val)
   end
 
   def add_space(room, x, y) do
@@ -131,15 +132,15 @@ defmodule AOC.Day06.Room do
 
   defp get_visted_nodes({ox, oy}, {dx, dy}) when ox == dx do
     case oy > dy do
-      true -> oy..dy//-1 |> Enum.map(&{ox, &1}) |> MapSet.new()
-      false -> oy..dy//1 |> Enum.map(&{ox, &1}) |> MapSet.new()
+      true -> oy..dy//-1 |> Enum.map(&{ox, &1})
+      false -> oy..dy//1 |> Enum.map(&{ox, &1})
     end
   end
 
   defp get_visted_nodes({ox, oy}, {dx, dy}) when oy == dy do
     case ox > dx do
-      true -> ox..dx//-1 |> Enum.map(&{&1, oy}) |> MapSet.new()
-      false -> ox..dx//1 |> Enum.map(&{&1, oy}) |> MapSet.new()
+      true -> ox..dx//-1 |> Enum.map(&{&1, oy})
+      false -> ox..dx//1 |> Enum.map(&{&1, oy})
     end
   end
 end
