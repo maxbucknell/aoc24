@@ -18,7 +18,8 @@ defmodule AOC do
     3 => AOC.Day03,
     4 => AOC.Day04,
     5 => AOC.Day05,
-    6 => AOC.Day06
+    6 => AOC.Day06,
+    7 => AOC.Day07
   }
 
   defp get_day(day) do
