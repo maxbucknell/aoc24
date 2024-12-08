@@ -52,8 +52,6 @@ defmodule AOC.Day06 do
 
     loops = AOC.Day06.Guard.find_potential_loops(room, guard)
 
-    IO.inspect(loops)
-
     {:ok, MapSet.size(loops)}
   end
 end

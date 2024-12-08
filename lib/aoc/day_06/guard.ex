@@ -15,19 +15,20 @@ defmodule AOC.Day06.Guard do
     end
   end
 
-  def find_potential_loops(room, guard, loops \\ MapSet.new()) do
+  def find_potential_loops(room, guard, loops \\ MapSet.new(), not_loops \\ MapSet.new()) do
     {_, _, direction} = guard
     obstacle = Room.next_obstacle(room, guard)
-    {{dx, dy}, path} = Room.move_to_obstacle(room, obstacle, guard)
+    # Discard the first location, since that is where the guard currently is!
+    {{dx, dy}, [_ | path]} = Room.move_to_obstacle(room, obstacle, guard)
 
-    new_loops =
-      Enum.reduce(path, MapSet.new(), fn {x, y}, loops ->
-        room = Room.add_obstacle(room, x, y)
+    {new_loops, not_loops} =
+      Enum.reduce(path, {MapSet.new(), not_loops}, fn {x, y}, {loops, not_loops} ->
+        hypothetical_room = Room.add_obstacle(room, x, y)
 
-        if will_loop?(room, guard) do
-          MapSet.put(loops, {x, y})
-        else
-          loops
+        cond do
+          MapSet.member?(not_loops, {x, y}) -> {loops, not_loops}
+          will_loop?(hypothetical_room, guard) -> {MapSet.put(loops, {x, y}), not_loops}
+          true -> {loops, MapSet.put(not_loops, {x, y})}
         end
       end)
 
@@ -36,28 +37,29 @@ defmodule AOC.Day06.Guard do
     if obstacle == nil do
       loops
     else
-      find_potential_loops(room, {dx, dy, rotate(direction)}, loops)
+      find_potential_loops(room, {dx, dy, rotate(direction)}, loops, not_loops)
     end
   end
 
-  def will_loop?(room, guard) do
+  def will_loop?(room, guard, previous \\ []) do
     obstacle = Room.next_obstacle(room, guard)
-    {{dx, dy}, _} = Room.move_to_obstacle(room, obstacle, guard)
-    {_, _, direction} = guard
 
-    guard = {dx, dy, rotate(direction)}
+    if obstacle == nil do
+      # We escaped!
+      false
+    else
+      {_, _, direction} = guard
+      {{dx, dy}, _} = Room.move_to_obstacle(room, obstacle, guard)
+      new_guard = {dx, dy, rotate(direction)}
 
-    {gx, gy, _} =
-      1..4
-      |> Enum.reduce(guard, fn _, guard ->
-        obstacle = Room.next_obstacle(room, guard)
-        {_, _, direction} = guard
-        {{dx, dy}, _} = Room.move_to_obstacle(room, obstacle, guard)
+      case new_guard in previous do
+        true ->
+          true
 
-        {dx, dy, rotate(direction)}
-      end)
-
-    gx == dx and gy == dy
+        false ->
+          will_loop?(room, new_guard, [new_guard | previous])
+      end
+    end
   end
 
   defp rotate(:up), do: :right

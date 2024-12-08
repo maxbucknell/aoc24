@@ -20,7 +20,7 @@ defmodule AOC.Day06.Room do
         i -> i
       end
 
-    List.insert_at(vals, i, val)
+    List.insert_at(vals, i, val) |> Enum.uniq()
   end
 
   def add_space(room, x, y) do

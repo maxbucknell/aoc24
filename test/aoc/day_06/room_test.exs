@@ -155,4 +155,23 @@ defmodule AOC.Day06.RoomTest do
 
     assert actual == expected
   end
+
+  test "Adding an existing obstacle" do
+    input = [
+      "v#"
+    ]
+
+    {room, _} = AOC.Day06.Parser.parse(input)
+
+    actual = Room.add_obstacle(room, 1, 0)
+
+    expected = %Room{
+      width: 2,
+      height: 1,
+      rows: %{0 => [1]},
+      cols: %{1 => [0]}
+    }
+
+    assert actual == expected
+  end
 end
