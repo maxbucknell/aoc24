@@ -1,4 +1,6 @@
 defmodule AOC do
+  require Logger
+
   def solve(day, part, filename, mode \\ :stream) do
     input =
       case mode do
@@ -16,7 +18,7 @@ defmodule AOC do
   end
 
   def load_and_solve(day, part) do
-    with {:ok, input} = AOC.Loader.load_input(day) do
+    with {:ok, input} <- AOC.Loader.load_input(day) do
       run_solution(day, part, input)
     end
   end
@@ -29,6 +31,15 @@ defmodule AOC do
       rescue
         _ in UndefinedFunctionError -> {:error, :not_implemented_yet}
       end
+    end
+  end
+
+  def benchmark(day, part) do
+    Logger.info("Beginning benchmark for AoC " <> Integer.to_string(day) <> part <> "...")
+
+    with {:ok, input} <- AOC.Loader.load_input(day) do
+      Logger.info("Loaded input!")
+      Benchee.run(solution: fn -> run_solution(day, part, input) end)
     end
   end
 
