@@ -1,4 +1,21 @@
 defmodule AOC do
+  def solve(day, part, filename, mode \\ :stream) do
+    input =
+      case mode do
+        :stream -> File.stream!(filename, :line)
+        :load -> File.read!(filename) |> String.split("\n")
+      end
+
+    with {:ok, module} <- get_day(day),
+         {:ok, function} <- get_part(part) do
+      try do
+        apply(module, function, [input])
+      rescue
+        _ in UndefinedFunctionError -> {:error, :invalid_part}
+      end
+    end
+  end
+
   def solve(day, part) do
     with {:ok, module} <- get_day(day),
          {:ok, function} <- get_part(part) do
