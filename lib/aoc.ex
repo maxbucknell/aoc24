@@ -6,47 +6,38 @@ defmodule AOC do
         :load -> File.read!(filename) |> String.split("\n")
       end
 
-    with {:ok, module} <- get_day(day),
+    run_solution(day, part, input)
+  end
+
+  def solve(day, part) do
+    input = IO.stream(:stdio, :line)
+
+    run_solution(day, part, input)
+  end
+
+  def run_solution(day, part, input) do
+    with {:ok, module} <- get_implementation(day),
          {:ok, function} <- get_part(part) do
       try do
         apply(module, function, [input])
       rescue
-        _ in UndefinedFunctionError -> {:error, :invalid_part}
+        _ in UndefinedFunctionError -> {:error, :not_implemented_yet}
       end
     end
   end
 
-  def solve(day, part) do
-    with {:ok, module} <- get_day(day),
-         {:ok, function} <- get_part(part) do
-      args = get_args(module, function)
+  defp get_implementation(day) when 0 < day and day <= 25 do
+    key = "Elixir.AOC.Day" <> get_day(day)
 
-      try do
-        apply(module, function, args)
-      rescue
-        _ in UndefinedFunctionError -> {:error, :invalid_part}
-      end
-    end
+    {:ok, String.to_existing_atom(key)}
   end
 
-  @solutions %{
-    1 => AOC.Day01,
-    2 => AOC.Day02,
-    3 => AOC.Day03,
-    4 => AOC.Day04,
-    5 => AOC.Day05,
-    6 => AOC.Day06,
-    7 => AOC.Day07,
-    8 => AOC.Day08
-  }
+  defp get_implementation(_) do
+    {:error, :invalid_day}
+  end
 
   defp get_day(day) do
-    with {n, ""} <- Integer.parse(day, 10),
-         {:ok, module} <- Map.fetch(@solutions, n) do
-      {:ok, module}
-    else
-      _ -> {:error, :invalid_day}
-    end
+    Integer.to_string(day) |> String.pad_leading(2, "0")
   end
 
   defp get_part("a") do
@@ -59,13 +50,5 @@ defmodule AOC do
 
   defp get_part(_) do
     {:error, :invalid_part}
-  end
-
-  defp get_args(AOC.Day03, _) do
-    [IO.stream(:stdio, 1)]
-  end
-
-  defp get_args(_, _) do
-    [IO.stream(:stdio, :line)]
   end
 end

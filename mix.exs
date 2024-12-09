@@ -3,7 +3,7 @@ defmodule AOC.MixProject do
 
   def project do
     [
-      app: :advent_of_code_2024,
+      app: :aoc,
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
