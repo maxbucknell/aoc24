@@ -15,6 +15,12 @@ defmodule AOC do
     run_solution(day, part, input)
   end
 
+  def load_and_solve(day, part) do
+    with {:ok, input} = AOC.Loader.load_input(day) do
+      run_solution(day, part, input)
+    end
+  end
+
   def run_solution(day, part, input) do
     with {:ok, module} <- get_implementation(day),
          {:ok, function} <- get_part(part) do
