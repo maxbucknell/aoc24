@@ -18,6 +18,21 @@ defmodule AOC.Day09 do
 
    - If the value is full, we return the checksum.
    - If the value is empty, we take the last full block.
+
+  Part B is a little more tricky. I can re-use a lot of my logic, but
+  I think it is going to be easiest if my scan tracks used blocks by
+  their size, and position.
+
+  All sizes are guaranteed to be in 1..9, since they are single digits.
+
+  This means that I can use only a small map, storing their IDs. In
+  fact, Enum.group_by gives me exactly what I want here.
+
+  We need to wrap each file with its starting position. Then we need to
+  group them, ordering the :empty from the left, the others from the right.
+
+  From there it should be straightforward to recurse through :empty and
+  put blocks in there, and then reassemble the disk.
   """
 
   @doc ~S"""
@@ -34,6 +49,24 @@ defmodule AOC.Day09 do
       AOC.Day09.Parser.parse(input)
       |> AOC.Day09.DiskUtils.compact_disk()
       |> AOC.Day09.DiskUtils.checksum()
+
+    {:ok, result}
+  end
+
+  @doc ~S"""
+  Day 9, Part A.
+
+  ## Example
+
+    iex> input = ["2333133121414131402\n"]
+    iex> AOC.Day09.b(input)
+    {:ok, 2858}
+  """
+  def b(input) do
+    result =
+      AOC.Day09.Parser.parse(input)
+      |> AOC.Day09.DiskUtils.defragmented_compact()
+      |> AOC.Day09.DiskUtils.checksum_from_positions()
 
     {:ok, result}
   end

@@ -144,4 +144,100 @@ defmodule AOC.Day09.DiskUtils do
   defp to_blocks({id, size}) do
     1..size |> Enum.map(fn _ -> id end)
   end
+
+  def defragmented_compact(disk) do
+    # We want to take each file from the end and move it to the first
+    # available space. This sucks in Elixir.
+    #
+    # We ca{:ok, n} start with a fold from the right with positions. But e
+    # also need to maintain an index of the free space, with positions.
+    #
+    # Then it becomes a "put things in boxes" exercise.
+    #
+    # For each file:
+    #
+    # Find free space.
+    # If found:
+    #   Add file to moved map.
+    #   Pop free space.
+    #   Put new free space if remainder
+
+    %{true: empty, false: files} =
+      with_positions(disk)
+      |> Enum.group_by(&is_empty?/1)
+
+    {new_positions, _} =
+      Enum.reverse(files)
+      |> Enum.reduce({[], empty}, fn {file, position}, {files, empty} ->
+        {new_position, new_empty} = move_file_to_free_space(empty, {file, position})
+
+        case new_position do
+          nil -> {[{file, position} | files], new_empty}
+          new_position -> {[{file, new_position} | files], new_empty}
+        end
+      end)
+
+    new_positions
+  end
+
+  defp with_positions(disk) do
+    {result, _} =
+      Enum.map_reduce(disk, 0, fn {_, size} = block, acc ->
+        {{block, acc}, acc + size}
+      end)
+
+    result
+  end
+
+  defp is_empty?({{:empty, _}, _}), do: true
+  defp is_empty?(_), do: false
+
+  defp move_file_to_free_space([], _) do
+    {nil, []}
+  end
+
+  defp move_file_to_free_space(
+         [{{:empty, empty_size}, empty_position} | tail],
+         {_, position}
+       )
+       when position < empty_position do
+    {nil, [{{:empty, empty_size}, empty_position} | tail]}
+  end
+
+  defp move_file_to_free_space(
+         [{{:empty, empty_size}, empty_position} | tail],
+         {{_, size}, _}
+       )
+       when size == empty_size do
+    {empty_position, tail}
+  end
+
+  defp move_file_to_free_space(
+         [{{:empty, empty_size}, empty_position} | tail],
+         {{_, size}, _}
+       )
+       when size < empty_size do
+    {empty_position, [{{:empty, empty_size - size}, empty_position + size} | tail]}
+  end
+
+  defp move_file_to_free_space(
+         [{{:empty, empty_size}, _} = space | tail],
+         {{_, size}, _} = file
+       )
+       when size > empty_size do
+    {empty_position, new_tail} = move_file_to_free_space(tail, file)
+
+    case empty_position do
+      nil -> {nil, [space | new_tail]}
+      pos -> {pos, [space | new_tail]}
+    end
+  end
+
+  def checksum_from_positions(positions) do
+    Enum.reduce(positions, 0, fn {{id, size}, position}, sum ->
+      weight = (position + (position + size - 1)) / 2
+
+      sum + Kernel.round(size * id * weight)
+    end)
+  end
 end
