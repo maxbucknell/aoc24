@@ -23,7 +23,7 @@ defmodule AOC.Day10.RoutePlanner do
   end
 
   def complete_trailheads(map, start) do
-    complete_trailheads(map, start, 1) |> MapSet.new()
+    complete_trailheads(map, start, 1)
   end
 
   def complete_trailheads(_, start, 10) do
