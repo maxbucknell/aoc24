@@ -14,12 +14,8 @@ defmodule AOC.Day10.RoutePlanner do
     [{1,1}]
   """
   def find(map, node, target) do
-    adjacent_nodes(node)
+    AOC.Utils.Enum.adjacent_nodes(node)
     |> Enum.filter(fn neighbour -> Map.get(map, neighbour) == target end)
-  end
-
-  defp adjacent_nodes({x, y}) do
-    [{x, y - 1}, {x + 1, y}, {x, y + 1}, {x - 1, y}]
   end
 
   def complete_trailheads(map, start) do
