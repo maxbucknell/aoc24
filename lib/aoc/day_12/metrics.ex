@@ -41,7 +41,7 @@ defmodule AOC.Day12.Metrics do
 
   defp perimeter_of_point(region, point) do
     neighbours_in_set =
-      AOC.Utils.Enum.adjacent_nodes(point)
+      AOC.Utils.Geometry.adjacent_nodes(point)
       |> Enum.count(&MapSet.member?(region, &1))
 
     4 - neighbours_in_set

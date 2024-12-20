@@ -6,7 +6,12 @@ defmodule AOC.Loader do
     with {:ok, url} <- get_url(number),
          {:ok, headers} <- get_headers(),
          {:ok, response} <- HTTPoison.get(url, headers) do
-      {:ok, String.split(response.body, "\n", trim: true)}
+      content =
+        response.body
+        |> String.split("\n")
+        |> Enum.map(fn line -> line <> "\n" end)
+
+      {:ok, content}
     end
   end
 

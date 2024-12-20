@@ -146,7 +146,7 @@ defmodule AOC.Day12.Parser do
 
   @spec is_in_region?(point(), region()) :: boolean()
   defp is_in_region?(point, region) do
-    AOC.Utils.Enum.adjacent_nodes(point)
+    AOC.Utils.Geometry.adjacent_nodes(point)
     |> Enum.any?(&MapSet.member?(region, &1))
   end
 

@@ -14,7 +14,7 @@ defmodule AOC.Day10.RoutePlanner do
     [{1,1}]
   """
   def find(map, node, target) do
-    AOC.Utils.Enum.adjacent_nodes(node)
+    AOC.Utils.Geometry.adjacent_nodes(node)
     |> Enum.filter(fn neighbour -> Map.get(map, neighbour) == target end)
   end
 
