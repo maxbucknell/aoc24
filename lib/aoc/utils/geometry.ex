@@ -8,6 +8,7 @@ defmodule AOC.Utils.Geometry do
   """
 
   @type point() :: {integer(), integer()}
+  @type direction() :: :up | :right | :down | :left
 
   @doc ~S"""
   Given a point {x, y}, list its adjacent nodes.
@@ -37,7 +38,7 @@ defmodule AOC.Utils.Geometry do
     iex> neighbour({41, 3}, :left)
     {40, 3}
   """
-  @spec neighbour(point(), :up | :right | :down | :left) :: point()
+  @spec neighbour(point(), direction()) :: point()
   def neighbour({x, y}, :up), do: {x, y - 1}
   def neighbour({x, y}, :right), do: {x + 1, y}
   def neighbour({x, y}, :down), do: {x, y + 1}
