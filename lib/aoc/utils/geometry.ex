@@ -47,4 +47,22 @@ defmodule AOC.Utils.Geometry do
   def largest({x1, y1}, {x2, y2}) do
     {max(x1, x2), max(y1, y2)}
   end
+
+  @doc ~S"""
+  Tests whether a point is within a box.
+
+  ## Examples
+
+    iex> out_of_bounds?(4, 4, {0, 0})
+    false
+    iex> out_of_bounds?(4, 4, {0, -30})
+    true
+    iex> out_of_bounds?(4, 4, {4, 4})
+    true
+    iex> out_of_bounds?(4, 4, {3, 3})
+    false
+  """
+  @spec out_of_bounds?(integer(), integer(), point()) :: boolean()
+  def out_of_bounds?(w, h, {x, y}) when 0 <= x and x < w and 0 <= y and y < h, do: false
+  def out_of_bounds?(_, _, _), do: true
 end
